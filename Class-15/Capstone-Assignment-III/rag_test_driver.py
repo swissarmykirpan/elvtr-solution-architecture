@@ -177,7 +177,7 @@ if  __name__ == "__main__":
 
     python_cmd = "python"   # on some setups, this maybe python3
 
-    path_to_capstone_03_base = os.path.abspath("capstone_03_base.py")
+    path_to_capstone_03_base = os.path.abspath("capstone_rag.py")
 
     command = [python_cmd, path_to_capstone_03_base,
                "--llm_id", llm_to_use,
