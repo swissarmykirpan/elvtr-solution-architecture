@@ -1,0 +1,6 @@
+   boto3
+   numpy
+   langchain-community
+   langchain-aws
+   pypdf
+   faiss-cpu
