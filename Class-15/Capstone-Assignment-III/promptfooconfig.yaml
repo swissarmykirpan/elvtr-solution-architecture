@@ -13,13 +13,13 @@ providers:
 
 tests:
   - vars:
-      topic: Is it possible that I get sentenced to jail due to failure in filings?
+      topic: Is it possible that I get sentenced to prison due to failure in filings?
     assert:
       # For more information on assertions, see https://promptfoo.dev/docs/configuration/expected-outputs
 
-      # Make sure output contains the word "taxes"
+      # Make sure output contains the word "prison"
       - type: icontains
-        value: jail
+        value: prison
 
 
   - vars:
@@ -40,6 +40,5 @@ tests:
     assert:
       # For more information on model-graded evals, see https://promptfoo.dev/docs/configuration/expected-outputs/model-graded
       - type: llm-rubric
-        value: ensure that the output has guidance on tax expenses for dinner
+        value: ensure that the output has tax guidance on expenses 
         provider: anthropic:messages:claude-3-haiku-20240307
-
