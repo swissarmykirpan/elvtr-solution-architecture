@@ -1,0 +1,45 @@
+# Learn more about building a configuration: https://promptfoo.dev/docs/configuration/guide
+description: "Starter promptfoo testing configuration for Capstone RAG. This will call rag_test_driver.py to call our RAG solution"
+
+prompts:
+  - "{{topic}}"
+  
+
+providers:
+  - exec:python rag_test_driver.py llm_option_one prompt_option_three
+  - exec:python rag_test_driver.py llm_option_two prompt_option_three
+  - exec:python rag_test_driver.py llm_option_three prompt_option_three
+  
+
+tests:
+  - vars:
+      topic: Is it possible that I get sentenced to prison due to failure in filings?
+    assert:
+      # For more information on assertions, see https://promptfoo.dev/docs/configuration/expected-outputs
+
+      # Make sure output contains the word "prison"
+      - type: icontains
+        value: prison
+
+
+  - vars:
+      topic: if I earned money last year do I have to pay taxes
+    assert:
+      # For more information on assertions, see https://promptfoo.dev/docs/configuration/expected-outputs
+
+      # Make sure output contains the word "taxes"
+      - type: icontains
+        value: taxes
+
+      # Prefer shorter outputs
+      - type: javascript
+        value: 1 / (output.length + 1)
+
+  - vars:
+      topic: I am self-employed can I expense dinners with clients
+    assert:
+      # For more information on model-graded evals, see https://promptfoo.dev/docs/configuration/expected-outputs/model-graded
+      - type: llm-rubric
+        value: ensure that the output has tax guidance on expenses 
+        provider: anthropic:messages:claude-3-haiku-20240307
+
