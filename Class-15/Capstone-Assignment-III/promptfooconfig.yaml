@@ -42,3 +42,47 @@ tests:
       - type: llm-rubric
         value: ensure that the output has tax guidance on expenses 
         provider: anthropic:messages:claude-3-haiku-20240307
+
+  - vars:
+      topic: Can I correct a misfilling
+    assert:
+      - type: icontains
+        value: Form 941
+
+  - vars:
+      topic: Do I have to report personal transactions
+    assert:
+      - type: icontains
+        value: do NOT have to file
+
+  - vars:
+      topic: Do I have to report multiple transactions under $10000 from the same buyer
+    assert:
+      - type: llm-rubric
+        value: ensure that the output has guidance on what payments must be reported 
+        provider: anthropic:messages:claude-3-haiku-20240307
+
+  - vars:
+      topic: As an individual what is the largest fine I can pay
+    assert:
+      - type: icontains
+        value: $250,000
+
+  - vars:
+      topic: What happens if I cannot retrieve a US individuals TIN
+    assert:
+      - type: llm-rubric
+        value: ensure that the output contains backup withholding
+        provider: anthropic:messages:claude-3-haiku-20240307
+
+  - vars: 
+      topic: Do I have to report traveler's checks received on vacation
+    assert:
+      - type: icontains
+        value: exception
+
+  - vars:
+      topic: Can I receive tax relief due to natural disasters
+    assert:
+      - type: icontains
+        value: relief is available

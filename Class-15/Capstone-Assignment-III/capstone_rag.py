@@ -7,6 +7,7 @@ import numpy as np
 
 import boto3
 
+from langchain_anthropic import ChatAnthropic
 from langchain_community.vectorstores import FAISS
 from langchain_aws import BedrockLLM, BedrockEmbeddings
 from langchain.indexes.vectorstore import VectorStoreIndexWrapper
@@ -45,7 +46,7 @@ default_query = """Is it possible that I get sentenced to jail due to failure in
 # This implementation is set up for Amazon Bedrock, if you are using an alternative provider
 # you will need to make that configuration change as a custom update to this script
 
-default_model_id = "amazon.titan-text-lite-v1"
+default_model_id = "claude-3-5-haiku-20241022"
 
 
 # Set verbose to False once you have the configuration working as desired
@@ -93,8 +94,8 @@ def setup_source_data():
     os.makedirs("data", exist_ok=True)
     files = [
         "https://www.irs.gov/pub/irs-pdf/p1544.pdf",
-        # "https://www.irs.gov/pub/irs-pdf/p15.pdf",
-        # "https://www.irs.gov/pub/irs-pdf/p1212.pdf",
+        "https://www.irs.gov/pub/irs-pdf/p15.pdf",
+        "https://www.irs.gov/pub/irs-pdf/p1212.pdf",
     ]
     for url in files:
         file_path = os.path.join("data", url.rpartition("/")[2])
@@ -115,10 +116,10 @@ def print_ww(*args, width: int = 100, **kwargs):
         print("\n".join(textwrap.wrap(line, width=width)))
 
 
-boto3_bedrock = boto3.client('bedrock-runtime')
+boto3_bedrock = boto3.client('bedrock-runtime', region_name='eu-west-2')
 
 # - configure the embedding models that will be used
-bedrock_embeddings = BedrockEmbeddings(model_id="amazon.titan-embed-text-v1", client=boto3_bedrock)
+bedrock_embeddings = BedrockEmbeddings(model_id="amazon.titan-embed-text-v2:0", client=boto3_bedrock)
 
 stored_faiss_index = "llm_faiss_index"
 
@@ -212,7 +213,7 @@ if __name__ == "__main__":
 
     # configure the Bedrock LLM that will be used
     llm_to_use = args.llm_id if args.llm_id else default_model_id
-    llm = BedrockLLM(model_id=llm_to_use, client=boto3_bedrock, model_kwargs={})
+    llm = ChatAnthropic(model=llm_to_use)
 
     # configure the base prompt template that will be used
     prompt_template_to_use = args.prompt_template if args.prompt_template else default_prompt_template
